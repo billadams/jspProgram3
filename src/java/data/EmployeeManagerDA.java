@@ -124,7 +124,6 @@ public class EmployeeManagerDA {
             
             ps = connection.prepareStatement(query);
             rs = ps.executeQuery();
-            Person person = null;
 
             while (rs.next()) {
                 
@@ -138,18 +137,9 @@ public class EmployeeManagerDA {
                 double rate = rs.getDouble("rate");
                 double avgWeeklyHours = rs.getDouble("avgWeeklyHours");
                 
-//                person = new Person();
                 Person employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID, 
                         birthDate, hireDate, salary, rate, avgWeeklyHours);
                 
-//                employee.setFirstName(rs.getString("firstName"));
-//                employee.setMiddleName(rs.getString("middleName"));
-//                employee.setLastName(rs.getString("lastName"));
-//                employee.setEmployeeID(Integer.toString(rs.getInt("employeeID")));
-//                employee.setBirthDate(rs.getDate("birthDate").toLocalDate());
-//                employee.setHireDate(rs.getDate("hireDate").toLocalDate());
-                
-
                 employees.add(employee);
                 
             }
