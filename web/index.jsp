@@ -62,9 +62,11 @@
                                 <th>First Name</th>
                                 <th>Middle Name</th>
                                 <th>Last Name</th>
-                                <th>Employee ID</th>
+                                <!--<th>Employee ID</th>-->
                                 <th>Birth Date</th>
                                 <th>Hire Date</th>
+                                <th>Employee Type</th>
+                                <th>Yearly Cost</th>
                                 <th></th>
                                 <!--<th></th>-->
                             </tr>
@@ -75,9 +77,34 @@
                                     <td><c:out value="${employee.firstName}" /></td>
                                     <td><c:out value="${employee.middleName}" /></td>
                                     <td><c:out value="${employee.lastName}" /></td>
-                                    <td><c:out value="${employee.employeeID}" /></td>
                                     <td><c:out value="${employee.birthDateFormatted}" /></td>
                                     <td><c:out value="${employee.hireDateFormatted}" /></td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${employee.getClass().simpleName == 'EmpSalary'}">
+                                                Salary
+                                            </c:when>
+                                            <c:when test="${employee.getClass().simpleName == 'EmpHourly'}">
+                                                Hourly
+                                            </c:when>
+                                            <c:otherwise>
+                                                None
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${employee.getClass().simpleName == 'EmpSalary'}">
+                                                <c:out value="${employee.yearlyPayCurrencyFormat}" />
+                                            </c:when>
+                                            <c:when test="${employee.getClass().simpleName == 'EmpHourly'}">
+                                                <c:out value="${employee.yearlyPayCurrencyFormat}" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                None
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
                                     <td>
                                         <form action="EmployeeEditServlet" method="post">
                                             <input type="hidden" name="action" value="editEmployee">

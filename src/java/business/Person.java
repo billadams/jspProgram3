@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author fssco
+ * @author Bill Adams
  */
 public class Person implements Serializable {
     

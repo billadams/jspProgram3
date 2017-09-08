@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import util.DBUtil;
+import util.EmployeeFactory;
 
 /**
  *
@@ -127,15 +128,29 @@ public class EmployeeManagerDA {
 
             while (rs.next()) {
                 
-                person = new Person();
-                person.setFirstName(rs.getString("firstName"));
-                person.setMiddleName(rs.getString("middleName"));
-                person.setLastName(rs.getString("lastName"));
-                person.setEmployeeID(Integer.toString(rs.getInt("employeeID")));
-                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
-                person.setHireDate(rs.getDate("hireDate").toLocalDate());
+                String firstName = rs.getString("firstName");
+                String middleName = rs.getString("middleName");
+                String lastName = rs.getString("lastName");
+                String employeeID = Integer.toString(rs.getInt("employeeID"));
+                LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+                LocalDate hireDate = rs.getDate("hireDate").toLocalDate();
+                double salary = rs.getDouble("salary");
+                double rate = rs.getDouble("rate");
+                double avgWeeklyHours = rs.getDouble("avgWeeklyHours");
+                
+//                person = new Person();
+                Person employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID, 
+                        birthDate, hireDate, salary, rate, avgWeeklyHours);
+                
+//                employee.setFirstName(rs.getString("firstName"));
+//                employee.setMiddleName(rs.getString("middleName"));
+//                employee.setLastName(rs.getString("lastName"));
+//                employee.setEmployeeID(Integer.toString(rs.getInt("employeeID")));
+//                employee.setBirthDate(rs.getDate("birthDate").toLocalDate());
+//                employee.setHireDate(rs.getDate("hireDate").toLocalDate());
+                
 
-                employees.add(person);
+                employees.add(employee);
                 
             }
 
