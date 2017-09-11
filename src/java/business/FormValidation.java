@@ -6,6 +6,8 @@
 package business;
 
 import java.time.LocalDate;
+import business.EmployeeOrderByWhiteList;
+import util.StringUtil;
 
 /**
  *
@@ -58,4 +60,32 @@ public class FormValidation {
 
         return message;
     } 
+    
+    public static String validateOrderByInput(String fieldString, String fieldName) {
+        
+        String message = "";
+        boolean matchFlag = false;
+        String convertedString = StringUtil.convertToEnumText(fieldString);
+        
+//        EmployeeOrderByWhiteList firstName  = EmployeeOrderByWhiteList.FIRST_NAME;
+//        EmployeeOrderByWhiteList middleName = EmployeeOrderByWhiteList.MIDDLE_NAME;
+//        EmployeeOrderByWhiteList lastName   = EmployeeOrderByWhiteList.LAST_NAME;
+//        EmployeeOrderByWhiteList birthDate  = EmployeeOrderByWhiteList.BIRTH_DATE;
+//        EmployeeOrderByWhiteList hireDate   = EmployeeOrderByWhiteList.HIRE_DATE;
+
+        for (EmployeeOrderByWhiteList orderByInput : EmployeeOrderByWhiteList.values()) {
+        
+            if (convertedString.equals(orderByInput)) {
+                matchFlag = true;
+            }
+            
+        }
+        
+        if (matchFlag == true) {
+            
+        }
+        
+        return message;
+        
+    }
 }
