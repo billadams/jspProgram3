@@ -27,7 +27,7 @@ public class EmployeeFactory {
         else if (rate != 0) {
             
             return new EmpHourly(firstName, middleName, lastName, employeeID, birthDate, hireDate, rate, avgWeeklyHours);
-                
+            
         }
         else {
             

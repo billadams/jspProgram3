@@ -12,7 +12,7 @@ import java.time.LocalDate;
  *
  * @author fssco
  */
-public class EmpSalary extends Person{
+public class EmpSalary extends Person {
     
     private double salary;
     
