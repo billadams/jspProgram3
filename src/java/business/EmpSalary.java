@@ -14,12 +14,12 @@ import java.time.LocalDate;
  */
 public class EmpSalary extends Person {
     
-    private double salary;
+    private Double salary;
     
     public EmpSalary () {}
     
     public EmpSalary(String firstName, String middleName, String lastName, String employeeID, 
-            LocalDate birthDate, LocalDate hireDate, double salary) {
+            LocalDate birthDate, LocalDate hireDate, Double salary) {
         super(firstName, middleName, lastName, employeeID, birthDate, hireDate);
         
         this.salary = salary;
@@ -29,7 +29,7 @@ public class EmpSalary extends Person {
     /**
      * @return the salary
      */
-    public double getSalary() {
+    public Double getSalary() {
         
         return salary;
         
@@ -38,7 +38,7 @@ public class EmpSalary extends Person {
     /**
      * @param salary the salary to set
      */
-    public void setSalary(double salary) {
+    public void setSalary(Double salary) {
         
         this.salary = salary;
         

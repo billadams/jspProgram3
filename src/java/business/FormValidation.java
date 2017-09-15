@@ -44,6 +44,23 @@ public class FormValidation {
         return message;
     }
     
+    public static String validateDoubleInput(String fieldString, String fieldName) {
+
+        String message = "";
+
+        try {
+
+            Double i = Double.parseDouble(fieldString);
+
+        } catch (NumberFormatException e) {
+
+            message = fieldName + " is required and must be a valid Double.";
+
+        }
+
+        return message;
+    }
+    
     public static String validateDateInput(String fieldString, String fieldName) {
         
         String message = "";

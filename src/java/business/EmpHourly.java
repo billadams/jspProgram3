@@ -14,13 +14,13 @@ import java.time.LocalDate;
  */
 public class EmpHourly extends Person {
     
-    private double rate;
-    private double avgWeeklyHours;
+    private Double rate;
+    private Double avgWeeklyHours;
     
     public EmpHourly() {}
     
     public EmpHourly(String firstName, String middleName, String lastName, String employeeID, 
-            LocalDate birthDate, LocalDate hireDate, double rate, double avgWeeklyHours) {
+            LocalDate birthDate, LocalDate hireDate, Double rate, Double avgWeeklyHours) {
         super(firstName, middleName, lastName, employeeID, birthDate, hireDate);
         
         this.rate = rate;
@@ -31,7 +31,7 @@ public class EmpHourly extends Person {
     /**
      * @return the rate
      */
-    public double getRate() {
+    public Double getRate() {
         
         return rate;
         
@@ -40,7 +40,7 @@ public class EmpHourly extends Person {
     /**
      * @param rate the rate to set
      */
-    public void setRate(double rate) {
+    public void setRate(Double rate) {
         
         this.rate = rate;
         
@@ -49,7 +49,7 @@ public class EmpHourly extends Person {
     /**
      * @return the avgWeeklyHours
      */
-    public double getAvgWeeklyHours() {
+    public Double getAvgWeeklyHours() {
         
         return avgWeeklyHours;
         
@@ -58,7 +58,7 @@ public class EmpHourly extends Person {
     /**
      * @param avgWeeklyHours the avgWeeklyHours to set
      */
-    public void setAvgWeeklyHours(double avgWeeklyHours) {
+    public void setAvgWeeklyHours(Double avgWeeklyHours) {
         
         this.avgWeeklyHours = avgWeeklyHours;
         

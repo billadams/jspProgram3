@@ -71,7 +71,7 @@ public class EmployeeListServlet extends HttpServlet {
             url = "/index.jsp";
                        
             // Get the default list of employees.
-            employeeList = allEmployees.getEmployees();
+            employeeList = allEmployees.getEmployees();          
             
         }
         else if (action.equals("searchRequest")) {    

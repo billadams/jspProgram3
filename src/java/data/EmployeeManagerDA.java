@@ -5,7 +5,10 @@
  */
 package data;
 
+import business.EmpHourly;
+import business.EmpSalary;
 import business.Person;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Optional;
 import util.DBUtil;
 import util.EmployeeFactory;
 
@@ -133,9 +137,14 @@ public class EmployeeManagerDA {
                 String employeeID = Integer.toString(rs.getInt("employeeID"));
                 LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
                 LocalDate hireDate = rs.getDate("hireDate").toLocalDate();
-                double salary = rs.getDouble("salary");
-                double rate = rs.getDouble("rate");
-                double avgWeeklyHours = rs.getDouble("avgWeeklyHours");
+                // Solution for casting a decimal to Double or returning null 
+                // found on stackoverflow here https://stackoverflow.com/a/38244441,
+                // which is necassary for creating the proper employee object.
+                Double salary = Optional.ofNullable(rs.getBigDecimal("salary"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double rate = Optional.ofNullable(rs.getBigDecimal("rate"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double avgWeeklyHours = (Double) rs.getObject("avgWeeklyHours");
                 
                 Person employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID, 
                         birthDate, hireDate, salary, rate, avgWeeklyHours);
@@ -229,6 +238,7 @@ public class EmployeeManagerDA {
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         ResultSet rs = null;
+        Person employee = null;
         
         String query = "SELECT * FROM employees "
                      + "WHERE employeeID = ?";
@@ -239,20 +249,37 @@ public class EmployeeManagerDA {
             ps.setInt(1, id);
             rs = ps.executeQuery();
             
-            Person person = null;
-            
             if (rs.next()) {
                 
-                person = new Person();
-                person.setEmployeeID(String.valueOf(rs.getInt("employeeID")));
-                person.setFirstName(rs.getString("firstName"));
-                person.setMiddleName(rs.getString("middleName"));
-                person.setLastName(rs.getString("lastName"));
-                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
-                person.setHireDate(rs.getDate("hireDate").toLocalDate());
+                String firstName = rs.getString("firstName");
+                String middleName = rs.getString("middleName");
+                String lastName = rs.getString("lastName");
+                String employeeID = Integer.toString(rs.getInt("employeeID"));
+                LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+                LocalDate hireDate = rs.getDate("hireDate").toLocalDate();
+                // Solution for casting a decimal to Double or returning null 
+                // found on stackoverflow here https://stackoverflow.com/a/38244441,
+                // which is necassary for creating the proper employee object.
+                Double salary = Optional.ofNullable(rs.getBigDecimal("salary"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double rate = Optional.ofNullable(rs.getBigDecimal("rate"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double avgWeeklyHours = (Double) rs.getObject("avgWeeklyHours");
+
+                employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID,
+                        birthDate, hireDate, salary, rate, avgWeeklyHours);
+                
+//                person = new Person();
+//                person.setEmployeeID(String.valueOf(rs.getInt("employeeID")));
+//                person.setFirstName(rs.getString("firstName"));
+//                person.setMiddleName(rs.getString("middleName"));
+//                person.setLastName(rs.getString("lastName"));
+//                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
+//                person.setHireDate(rs.getDate("hireDate").toLocalDate());
                 
             }
-            return person;
+            
+            return employee;
             
         }
         catch (SQLException e) {
@@ -281,7 +308,10 @@ public class EmployeeManagerDA {
                      + "middleName = ?, "
                      + "lastName = ?, "
                      + "birthDate = ?, "
-                     + "hireDate = ? "
+                     + "hireDate = ?, "
+                     + "salary = ?, "
+                     + "avgWeeklyHours = ?, "
+                     + "rate = ? "
                      + "WHERE employeeID = ?";
     
         try {
@@ -292,7 +322,31 @@ public class EmployeeManagerDA {
             ps.setString(3, person.getLastName());
             ps.setDate(4, java.sql.Date.valueOf(person.getBirthDate()));
             ps.setDate(5, java.sql.Date.valueOf(person.getHireDate()));
-            ps.setInt(6, Integer.parseInt(person.getEmployeeID()));
+            if (person instanceof EmpSalary) {
+                
+                EmpSalary employeeSalary = (EmpSalary) person;
+                ps.setDouble(6, employeeSalary.getSalary());
+                
+            }
+            else { 
+                
+                ps.setBigDecimal(6, null);
+                
+            }
+            if (person instanceof EmpHourly) {
+                
+                EmpHourly employeeHourly = (EmpHourly) person;
+                ps.setDouble(7, employeeHourly.getAvgWeeklyHours());
+                ps.setDouble(8, employeeHourly.getRate());
+                
+            }
+            else {
+                
+                ps.setBigDecimal(7, null);
+                ps.setBigDecimal(8, null);
+                
+            }
+            ps.setInt(9, Integer.parseInt(person.getEmployeeID()));
             
             return ps.executeUpdate();
             

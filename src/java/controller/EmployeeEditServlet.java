@@ -5,6 +5,8 @@
  */
 package controller;
 
+import business.EmpHourly;
+import business.EmpSalary;
 import business.FormValidation;
 import business.Person;
 import data.EmployeeManagerDA;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import util.DateUtil;
+import util.EmployeeFactory;
 
 /**
  *
@@ -42,6 +45,9 @@ public class EmployeeEditServlet extends HttpServlet {
         HttpSession session = request.getSession();
         boolean isUpdate = false;
         Person employee = null;
+        Double salary = null;
+        Double rate = null;
+        Double avgWeeklyHours = null;
         
         String action = request.getParameter("action");
         if (action.equals("first")) {
@@ -54,7 +60,8 @@ public class EmployeeEditServlet extends HttpServlet {
             
             int employeeID = Integer.parseInt(request.getParameter("employeeID"));           
             employee = EmployeeManagerDA.selectPersonByID(employeeID);
-            request.setAttribute("employee", employee);           
+            request.setAttribute("employee", employee);  
+            session.setAttribute("employee", employee);
             url = "/edit.jsp";
             
         }
@@ -114,14 +121,67 @@ public class EmployeeEditServlet extends HttpServlet {
                 hireDate = LocalDate.parse(hireDateString);
                 
             }
+            
+            Person employeeType = (Person) session.getAttribute("employee");
+            
+            if (employeeType instanceof EmpSalary) {
+                
+                String salaryString = request.getParameter("salary");
 
-            employee = new Person();
-            employee.setEmployeeID(employeeIDString);
-            employee.setFirstName(firstName);
-            employee.setMiddleName(middleName);
-            employee.setLastName(lastName);
-            employee.setBirthDate(birthDate);
-            employee.setHireDate(hireDate);
+                if (salaryString != null) {
+
+                    validationMessage = FormValidation.validateDoubleInput(salaryString, "Salary");
+                    if (!validationMessage.equals("")) {
+
+                        errorMessages.add(validationMessage);
+                        salary = 0.0;
+
+                    } else {
+
+                        salary = Double.parseDouble(salaryString);
+
+                    }
+                }
+            }
+            else if (employeeType instanceof EmpHourly) {
+                
+                String averageWeeklyHoursString = request.getParameter("avgWeeklyHours");
+
+                if (averageWeeklyHoursString != null) {
+
+                    validationMessage = FormValidation.validateDoubleInput(averageWeeklyHoursString, "Average Weekly Hours");
+                    if (!validationMessage.equals("")) {
+
+                        errorMessages.add(validationMessage);
+                        avgWeeklyHours = 0.0;
+
+                    } else {
+
+                        avgWeeklyHours = Double.parseDouble(averageWeeklyHoursString);
+
+                    }
+                }
+
+                String rateString = request.getParameter("rate");
+
+                if (rateString != null) {
+
+                    validationMessage = FormValidation.validateDoubleInput(rateString, "Salary");
+                    if (!validationMessage.equals("")) {
+
+                        errorMessages.add(validationMessage);
+                        rate = 0.0;
+
+                    } else {
+
+                        rate = Double.parseDouble(rateString);
+
+                    }
+                }                
+            }
+
+            employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeIDString,
+                    birthDate, hireDate, salary, rate, avgWeeklyHours);
             
             // If errorMessages comes back empty (i.e. everything validated), create 
             // or update the person collection and add it to the session.

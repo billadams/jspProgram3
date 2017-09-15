@@ -17,14 +17,14 @@ import java.time.LocalDate;
 public class EmployeeFactory {
     
     public static Person createPerson(String firstName, String middleName, String lastName, String employeeID,
-            LocalDate birthDate, LocalDate hireDate, double salary, double rate, double avgWeeklyHours) {
+            LocalDate birthDate, LocalDate hireDate, Double salary, Double rate, Double avgWeeklyHours) {
         
-        if (salary != 0) {
+        if (salary != null) {
             
             return new EmpSalary(firstName, middleName, lastName, employeeID, birthDate, hireDate, salary);
             
         }      
-        else if (rate != 0) {
+        else if (rate != null) {
             
             return new EmpHourly(firstName, middleName, lastName, employeeID, birthDate, hireDate, rate, avgWeeklyHours);
             

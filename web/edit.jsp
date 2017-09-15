@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="utf-8"%>
+    <%@page contentType="text/html" pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -36,24 +36,28 @@
         <form action="EmployeeEditServlet" method="post">
             <input type="hidden" name="action" value="updateEmployee">
             <input type="hidden" name="employeeID" value="<c:out value='${employee.employeeID}' />">
+            
             <div class="form-group row">
                 <label for="first-name" class="col-md-3 col-form-label">First name:</label>
                 <div class="col-md-9">
                     <input type="text" name="firstName" class="form-control" id="first-name" value="<c:out value='${employee.firstName}' />">
                 </div>
-            </div>
+            </div> <!-- end form-group -->
+            
             <div class="form-group row">
                 <label for="middle-name" class="col-md-3 col-form-label">Middle name:</label>
                 <div class="col-md-9">
                     <input type="text" name="middleName" class="form-control" id="middle-name" value="<c:out value='${employee.middleName}' />">
                 </div>
-            </div>
+            </div> <!-- end form-group -->
+            
             <div class="form-group row">
                 <label for="last-name" class="col-md-3 col-form-label">Last name:</label>
                 <div class="col-md-9">
                     <input type="text" name="lastName" class="form-control" id="last-name" value="<c:out value='${employee.lastName}' />">
                 </div>
-            </div>
+            </div> <!-- end form-group -->
+            
             <div class="form-group row">
                 <label for="date-of-birth" class="col-md-3 col-form-label">Date of Birth:</label>
                 <div class="col-md-9">
@@ -69,7 +73,8 @@
                         </c:choose>
                     >
                 </div>
-            </div>             
+            </div> <!-- end form-group -->  
+            
             <div class="form-group row">
                 <label for="hire-date" class="col-md-3 col-form-label">Hire Date:</label>
                 <div class="col-md-9">
@@ -84,7 +89,42 @@
                            </c:choose>
                     >
                 </div>
-            </div>
+            </div> <!-- end form-group -->   
+            
+            <c:choose>
+                <c:when test="${employee.getClass().simpleName == 'EmpSalary'}">
+                    <div class="form-group row">
+                        <label for="salary" class="col-md-3 col-form-label">Salary:</label>
+                        <div class="col-md-9">
+                            <input type="text" name="salary" class="form-control" id="salary"
+                                value="<c:out value='${employee.salary}' />"
+                            >
+                        </div>
+                    </div> <!-- end form-group -->
+                </c:when>
+                <c:when test="${employee.getClass().simpleName == 'EmpHourly'}">
+                    <div class="form-group row">
+                        <label for="average-weekly-hours" class="col-md-3 col-form-label">Average Hours:</label> 
+                        <div class="col-md-9">
+                            <input type="text" name="avgWeeklyHours" class="form-control" id="average-weekly-hours"
+                                value="<c:out value='${employee.avgWeeklyHours}' />"
+                            >
+                        </div>
+                    </div> <!-- end form-group -->
+                    <div class="form-group row">
+                        <label for="rate" class="col-md-3 col-form-label">Rate:</label>
+                        <div class="col-md-9">
+                            <input type="text" name="rate" class="form-control" id="rate"
+                                value="<c:out value='${employee.rate}' />"
+                            >
+                        </div>
+                    </div> <!-- end form-group -->
+                </c:when>
+                <c:otherwise>
+
+                </c:otherwise>
+            </c:choose>
+            
             <div class="form-group row">
                 <div>
                     <a href="EmployeeListServlet" class="btn btn-danger">Cancel</a>
@@ -98,7 +138,8 @@
                         </c:otherwise>
                     </c:choose>
                 </div>
-            </div>
+            </div> <!-- end form-group -->
+            
         </form>
     </div> <!-- end col-md-6 -->
 
