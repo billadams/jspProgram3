@@ -82,23 +82,23 @@ public class FormValidation {
         
         String message = "";
         boolean matchFlag = false;
-        String convertedString = StringUtil.convertToEnumText(fieldString);
-        
-//        EmployeeOrderByWhiteList firstName  = EmployeeOrderByWhiteList.FIRST_NAME;
-//        EmployeeOrderByWhiteList middleName = EmployeeOrderByWhiteList.MIDDLE_NAME;
-//        EmployeeOrderByWhiteList lastName   = EmployeeOrderByWhiteList.LAST_NAME;
-//        EmployeeOrderByWhiteList birthDate  = EmployeeOrderByWhiteList.BIRTH_DATE;
-//        EmployeeOrderByWhiteList hireDate   = EmployeeOrderByWhiteList.HIRE_DATE;
 
         for (EmployeeOrderByWhiteList orderByInput : EmployeeOrderByWhiteList.values()) {
         
-            if (convertedString.equals(orderByInput)) {
+            if (fieldString.equals(orderByInput.toString())) {
                 matchFlag = true;
-            }
-            
+                
+            }       
         }
         
         if (matchFlag == true) {
+            
+            return message;
+            
+        }
+        else {
+            
+            message = "That filter type does not exist hacker!";
             
         }
         

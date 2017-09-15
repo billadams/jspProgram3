@@ -6,6 +6,8 @@
 package controller;
 
 import business.EmployeeManager;
+import business.EmployeeOrderByWhiteList;
+import business.FormValidation;
 import business.Person;
 import data.EmployeeManagerDA;
 import java.io.IOException;
@@ -45,6 +47,7 @@ public class EmployeeListServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String dateInputString = null;
         String listCount = null;
+        String message = "";
         
         // Set the date input to today.
         dateInputString = DateUtil.createFormattedDateInputString();
@@ -134,10 +137,24 @@ public class EmployeeListServlet extends HttpServlet {
             
         } else if (action.equals("order")) {
             
+            String validationMessage = "";
             String orderBy = request.getParameter("orderBy");
             
-            employeeList = EmployeeManagerDA.sortListAscending(orderBy);
+            validationMessage = FormValidation.validateOrderByInput(orderBy, "Filter");
             
+            if (!validationMessage.equals("")) {
+                
+                errorMessages.add(validationMessage);
+                request.setAttribute("errorMessages", errorMessages);
+                employeeList = allEmployees.getEmployees();
+                
+            }
+            else {
+                
+                employeeList = EmployeeManagerDA.sortListAscending(orderBy);
+                message = "Employee List sorted by " + orderBy;
+                request.setAttribute("message", message);
+            }            
         }
         
         // Persist the hasSearched variable.

@@ -19,7 +19,11 @@
         <div class="container">
             <h1>Employee List</h1>
             
-            <h2>${message}</h2>
+            <c:if test="${message != null}">
+                <div class="alert alert-success" role="alert">
+                    <p>${message}</p>
+                </div>
+            </c:if>
                     
             <c:if test="${searchDateFormatted != null}">
                 <div class="alert alert-success" role="alert">
@@ -46,7 +50,7 @@
                         <div class="form-group">
                             <label for="order-by">Order by:</label>
                             <select name="orderBy">
-                                <option value=""></option>
+                                <!--<option value=""></option>-->
                                 <option value="firstName">First Name</option>
                                 <option value="middleName">Middle Name</option>
                                 <option value="lastName">Last Name</option>

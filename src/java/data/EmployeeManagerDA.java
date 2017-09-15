@@ -199,15 +199,35 @@ public class EmployeeManagerDA {
 
             while (rs.next()) {
                 
-                Person person = new Person();
-                person.setFirstName(rs.getString("firstName"));
-                person.setMiddleName(rs.getString("middleName"));
-                person.setLastName(rs.getString("lastName"));
-                person.setEmployeeID(Integer.toString(rs.getInt("employeeID")));
-                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
-                person.setHireDate(rs.getDate("hireDate").toLocalDate());
+                String firstName = rs.getString("firstName");
+                String middleName = rs.getString("middleName");
+                String lastName = rs.getString("lastName");
+                String employeeID = Integer.toString(rs.getInt("employeeID"));
+                LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+                LocalDate hireDate = rs.getDate("hireDate").toLocalDate();
+                // Solution for casting a decimal to Double or returning null 
+                // found on stackoverflow here https://stackoverflow.com/a/38244441,
+                // which is necassary for creating the proper employee object.
+                Double salary = Optional.ofNullable(rs.getBigDecimal("salary"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double rate = Optional.ofNullable(rs.getBigDecimal("rate"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double avgWeeklyHours = (Double) rs.getObject("avgWeeklyHours");
 
-                employees.add(person);
+                Person employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID,
+                        birthDate, hireDate, salary, rate, avgWeeklyHours);
+
+                employees.add(employee);
+                
+//                Person person = new Person();
+//                person.setFirstName(rs.getString("firstName"));
+//                person.setMiddleName(rs.getString("middleName"));
+//                person.setLastName(rs.getString("lastName"));
+//                person.setEmployeeID(Integer.toString(rs.getInt("employeeID")));
+//                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
+//                person.setHireDate(rs.getDate("hireDate").toLocalDate());
+//
+//                employees.add(person);
                 
             }
 
@@ -268,14 +288,6 @@ public class EmployeeManagerDA {
 
                 employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID,
                         birthDate, hireDate, salary, rate, avgWeeklyHours);
-                
-//                person = new Person();
-//                person.setEmployeeID(String.valueOf(rs.getInt("employeeID")));
-//                person.setFirstName(rs.getString("firstName"));
-//                person.setMiddleName(rs.getString("middleName"));
-//                person.setLastName(rs.getString("lastName"));
-//                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
-//                person.setHireDate(rs.getDate("hireDate").toLocalDate());
                 
             }
             
@@ -418,15 +430,25 @@ public class EmployeeManagerDA {
 
             while (rs.next()) {
 
-                Person person = new Person();
-                person.setFirstName(rs.getString("firstName"));
-                person.setMiddleName(rs.getString("middleName"));
-                person.setLastName(rs.getString("lastName"));
-                person.setEmployeeID(Integer.toString(rs.getInt("employeeID")));
-                person.setBirthDate(rs.getDate("birthDate").toLocalDate());
-                person.setHireDate(rs.getDate("hireDate").toLocalDate());
+                String firstName = rs.getString("firstName");
+                String middleName = rs.getString("middleName");
+                String lastName = rs.getString("lastName");
+                String employeeID = Integer.toString(rs.getInt("employeeID"));
+                LocalDate birthDate = rs.getDate("birthDate").toLocalDate();
+                LocalDate hireDate = rs.getDate("hireDate").toLocalDate();
+                // Solution for casting a decimal to Double or returning null 
+                // found on stackoverflow here https://stackoverflow.com/a/38244441,
+                // which is necassary for creating the proper employee object.
+                Double salary = Optional.ofNullable(rs.getBigDecimal("salary"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double rate = Optional.ofNullable(rs.getBigDecimal("rate"))
+                        .map(BigDecimal::doubleValue).orElse(null);
+                Double avgWeeklyHours = (Double) rs.getObject("avgWeeklyHours");
 
-                employees.add(person);
+                Person employee = EmployeeFactory.createPerson(firstName, middleName, lastName, employeeID,
+                        birthDate, hireDate, salary, rate, avgWeeklyHours);
+
+                employees.add(employee);
 
             }
 
