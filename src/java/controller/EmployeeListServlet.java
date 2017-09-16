@@ -6,22 +6,22 @@
 package controller;
 
 import business.EmployeeManager;
-import business.EmployeeOrderByWhiteList;
 import business.FormValidation;
 import business.Person;
 import data.EmployeeManagerDA;
 import java.io.IOException;
 import java.time.LocalDate;
-//import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import util.DateUtil;
+import util.StringUtil;
 
 /**
  *
@@ -42,12 +42,16 @@ public class EmployeeListServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String url = "/index.jsp";
-        ArrayList<String> errorMessages = new ArrayList<>();
+        List<String> errorMessages = new ArrayList<>();
+        List<Person> employeeList = null;
+        EmployeeManager allEmployees = null;
         boolean hasSearched = false;
         HttpSession session = request.getSession();
         String dateInputString = null;
         String listCount = null;
         String message = "";
+        int rowCount = 0;
+        
         
         // Set the date input to today.
         dateInputString = DateUtil.createFormattedDateInputString();
@@ -62,14 +66,17 @@ public class EmployeeListServlet extends HttpServlet {
             
         }
         
-        // Create the default list of employees if they don't already exist.
-        int rowcount = EmployeeManagerDA.addEmployeesToDB();
-
-        // Create the instances the application needs.
-        EmployeeManager allEmployees = new EmployeeManager();
-        ArrayList<Person> employeeList = new ArrayList<Person>();
-        
         if (action.equals("defaultList")) {
+            
+            // Create the default list of employees if they don't already exist.
+            rowCount = EmployeeManagerDA.addEmployeesToDB();
+
+            // Create the instances the application needs.
+            allEmployees = new EmployeeManager();
+            session.setAttribute("allEmployees", allEmployees);
+            
+            employeeList = new ArrayList<Person>();
+            session.setAttribute("employeeList", employeeList);
             
             url = "/index.jsp";
                        
@@ -90,6 +97,7 @@ public class EmployeeListServlet extends HttpServlet {
                 // Override the default list of employees to reflect the 
                 // search criteria the user selected from the form.
                 String searchCriteria = request.getParameter("optionsDate");
+                allEmployees = (EmployeeManager) session.getAttribute("allEmployees");
                 employeeList = allEmployees.searchDB(hireDate, searchCriteria);
 
                 // Format the date for output.
@@ -115,12 +123,13 @@ public class EmployeeListServlet extends HttpServlet {
             catch (Exception e) {
                 
                 // Get the default list of employees.
+                allEmployees = (EmployeeManager) session.getAttribute("allEmployees");
                 employeeList = allEmployees.getEmployees();
                 
                 // Set the date input back to today.
                 dateInputString = DateUtil.createFormattedDateInputString();
                 
-           errorMessages.add("Please enter a valid search date.");
+                errorMessages.add("Please enter a valid search date.");
                 request.setAttribute("errorMessages", errorMessages);
                 
             }
@@ -130,12 +139,15 @@ public class EmployeeListServlet extends HttpServlet {
             // The user cleared the search so set the hasSearched variable
             // to false and generate the default list of employees.
             hasSearched = false;
+            allEmployees = (EmployeeManager) session.getAttribute("allEmployees");
             employeeList = allEmployees.getEmployees();
+            session.setAttribute("employeeList", employeeList);
             
             // Set the date input to today.
             dateInputString = DateUtil.createFormattedDateInputString();
             
-        } else if (action.equals("order")) {
+        } 
+        else if (action.equals("order")) {
             
             String validationMessage = "";
             String orderBy = request.getParameter("orderBy");
@@ -146,13 +158,16 @@ public class EmployeeListServlet extends HttpServlet {
                 
                 errorMessages.add(validationMessage);
                 request.setAttribute("errorMessages", errorMessages);
+                allEmployees = (EmployeeManager) session.getAttribute("allEmployees");
                 employeeList = allEmployees.getEmployees();
+                session.setAttribute("employeeList", employeeList);
                 
             }
             else {
                 
                 employeeList = EmployeeManagerDA.sortListAscending(orderBy);
-                message = "Employee List sorted by " + orderBy;
+                session.setAttribute("employeeList", employeeList);
+                message = "Employee List sorted by " + StringUtil.convertEnumToString(orderBy) + ".";
                 request.setAttribute("message", message);
             }            
         }
@@ -160,7 +175,7 @@ public class EmployeeListServlet extends HttpServlet {
         // Persist the hasSearched variable.
         session.setAttribute("hasSearched", hasSearched);
         
-        request.setAttribute("rowcount", rowcount);
+        request.setAttribute("rowcount", rowCount);
         request.setAttribute("dateInputString", dateInputString);
         request.setAttribute("employeeList", employeeList);
         

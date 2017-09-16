@@ -13,13 +13,13 @@ import data.EmployeeManagerDA;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import util.DateUtil;
 import util.EmployeeFactory;
 
 /**
@@ -41,7 +41,7 @@ public class EmployeeEditServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String url = "/index.jsp";
-        ArrayList<String> errorMessages = new ArrayList<String>();
+        List<String> errorMessages = new ArrayList<String>();
         HttpSession session = request.getSession();
         boolean isUpdate = false;
         Person employee = null;

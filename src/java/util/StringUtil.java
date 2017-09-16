@@ -5,6 +5,8 @@
  */
 package util;
 
+import business.EmployeeOrderByWhiteList;
+
 /**
  *
  * @author Bill Adams
@@ -25,6 +27,43 @@ public class StringUtil {
         sb.append(suffix);
         
         String convertedString = String.valueOf(sb);
+        
+        return convertedString;
+        
+    }
+    
+    public static String convertEnumToString(String string) {
+        
+        String convertedString = "";
+        
+        switch (string) {
+            
+            case "firstName":
+                
+                convertedString = "First Name";
+                break;
+                
+            case "middleName":
+                
+                convertedString = "Middle Name";
+                break;
+                
+            case "lastName":
+                
+                convertedString = "Last Name";
+                break;
+                
+            case "birthDate":
+                
+                convertedString = "Birth Date";
+                break;
+                
+            case "hireDate":
+                
+                convertedString = "Hire Date";
+                break;
+                
+        }
         
         return convertedString;
         

@@ -98,7 +98,7 @@ public class FormValidation {
         }
         else {
             
-            message = "That filter type does not exist hacker!";
+            message = "Please select one of the available filter options.";
             
         }
         
